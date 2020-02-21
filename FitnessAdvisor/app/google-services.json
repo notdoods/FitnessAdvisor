@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "846459333083",
+    "firebase_url": "https://fitness-advisor-b9371.firebaseio.com",
+    "project_id": "fitness-advisor-b9371",
+    "storage_bucket": "fitness-advisor-b9371.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:846459333083:android:ffa1ffe14a8f578e685ffe",
+        "android_client_info": {
+          "package_name": "com.example.fitnessadvisor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "846459333083-h4ss4k17jkodt12etj1utk7hmhkccjjf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkR9-LtBljgOpT5fF7Rdkv4neOxybrRQI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "846459333083-h4ss4k17jkodt12etj1utk7hmhkccjjf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
