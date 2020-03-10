@@ -3,6 +3,7 @@ package com.example.fitnessadvisor;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,8 +32,10 @@ public class MainActivity extends AppCompatActivity {
         Button create_account = findViewById(R.id.create_acc);
         create_account.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Log.d(TAG, "Register button clicked");
                 mAuth = FirebaseAuth.getInstance();
 
+                // Get text from text fields
                 EditText etext = (EditText) findViewById(R.id.email);
                 EditText ptext = (EditText) findViewById(R.id.password);
 
@@ -47,19 +50,21 @@ public class MainActivity extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "createUserWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    //updateUI(user);
+                                    navigate();
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                     Toast.makeText(MainActivity.this, "Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
-                                    //updateUI(null);
                                 }
-
-                                // ...
                             }
                         });
             }
         });
+    }
+
+    void navigate() {
+        Intent intent = new Intent(MainActivity.this, UserRegisterDataActivity.class);
+        startActivity(intent);
     }
 }
