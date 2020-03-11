@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "createUserWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    navigate();
+                                    navigate(UserRegisterDataActivity.class);
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -61,10 +61,25 @@ public class MainActivity extends AppCompatActivity {
                         });
             }
         });
+
+        Button login = findViewById(R.id.switch_to_login);
+        login.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.d(TAG, "Sign In button clicked");
+                navigate(LogIn.class);
+            }
+        });
     }
 
-    void navigate() {
-        Intent intent = new Intent(MainActivity.this, UserRegisterDataActivity.class);
+    /*
+    @Override
+    public void onStop() {
+        super.onStop();
+        finish();
+    }*/
+
+    void navigate(Object o) {
+        Intent intent = new Intent(MainActivity.this, (Class<?>) o);
         startActivity(intent);
     }
 }
