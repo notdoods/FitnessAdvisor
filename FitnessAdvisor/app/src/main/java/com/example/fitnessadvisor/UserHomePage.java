@@ -70,7 +70,7 @@ public class UserHomePage extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = findViewById(R.id.floatingActionButton);
+        Button fab = findViewById(R.id.add_new_task);
         fab.setOnClickListener( new View.OnClickListener() {
             public void onClick(View v) {
                 Log.d(TAG, "Explore button clicked");
