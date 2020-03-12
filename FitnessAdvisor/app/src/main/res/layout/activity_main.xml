@@ -80,4 +80,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switch_to_login" />
 
+    <Button
+        android:id="@+id/permissions"
+        android:layout_width="81dp"
+        android:layout_height="40dp"
+        android:text="Permissions"
+        android:textSize='8dp'
+        app:layout_constraintBottom_toTopOf="@+id/email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
