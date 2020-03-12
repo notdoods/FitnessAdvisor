@@ -3,6 +3,7 @@ package com.example.fitnessadvisor;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -46,7 +47,7 @@ public class LogIn extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "signInWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    //navigate();
+                                    navigate(UserHomePage.class);
                                 } else {
                                     // If sign in fails, display a message to the user.
                                     Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -57,5 +58,10 @@ public class LogIn extends AppCompatActivity {
                         });
             }
         });
+    }
+
+    void navigate(Object o) {
+        Intent intent = new Intent(LogIn.this, (Class<?>) o);
+        startActivity(intent);
     }
 }

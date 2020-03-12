@@ -2,6 +2,7 @@ package com.example.fitnessadvisor;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -84,8 +85,14 @@ public class UserRegisterDataActivity extends AppCompatActivity {
                 Log.d(TAG, "Pushing  " + id + " to db");
 
                 // TODO: navigate to new activity (user homepage)
-                //finish();
+                navigate(UserHomePage.class);
+                finish();
             }
         });
+    }
+
+    void navigate(Object o) {
+        Intent intent = new Intent(UserRegisterDataActivity.this, (Class<?>) o);
+        startActivity(intent);
     }
 }
