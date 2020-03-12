@@ -16,6 +16,12 @@ public class User {
         //this.p = p;
     }
 
+    public User(){
+        this.name = "";
+        this.id = "";
+        this.age = 0;
+    }
+
 
     // Mutators
     public void setId(String id) {

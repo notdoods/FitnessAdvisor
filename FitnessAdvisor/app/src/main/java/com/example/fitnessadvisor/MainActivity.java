@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
                 mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
@@ -71,12 +73,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /*
     @Override
     public void onStop() {
         super.onStop();
         finish();
-    }*/
+    }
 
     void navigate(Object o) {
         Intent intent = new Intent(MainActivity.this, (Class<?>) o);
