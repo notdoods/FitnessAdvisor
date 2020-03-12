@@ -1,6 +1,7 @@
 package com.example.fitnessadvisor;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -10,6 +11,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -83,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button buttonRequest = findViewById(R.id.permissions);
         buttonRequest.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onClick(View v) {
 
