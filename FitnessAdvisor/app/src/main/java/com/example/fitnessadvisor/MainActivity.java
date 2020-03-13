@@ -7,8 +7,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.activity.ComponentActivity;
 
-import android.Manifest;
 import android.content.pm.PackageManager;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.ACCESS_WIFI_STATE;
+import static android.Manifest.permission.ACTIVITY_RECOGNITION;
+import static android.Manifest.permission.INTERNET;
 
 import android.content.Intent;
 import android.os.Build;
@@ -48,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
                 mAuth = FirebaseAuth.getInstance();
 
                 // Get text from text fields
-                EditText etext = (EditText) findViewById(R.id.email);
-                EditText ptext = (EditText) findViewById(R.id.password);
+                EditText etext = findViewById(R.id.email);
+                EditText ptext = findViewById(R.id.password);
 
                 email = etext.getText().toString();
                 password = ptext.getText().toString();
@@ -83,20 +86,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button buttonPlaces = findViewById(R.id.places);
+        buttonPlaces.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                intent = new Intent(getApplicationContext(), findPlaces.class);
+                startActivity(intent);
+            }
+        });
+
         Button buttonRequest = findViewById(R.id.permissions);
         buttonRequest.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onClick(View v) {
 
-                if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED){
+                if(ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED){
                     // Permission is not granted
-                    if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.ACTIVITY_RECOGNITION)){
+                    if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, android.Manifest.permission.ACTIVITY_RECOGNITION)){
                         // explain to the user
                         Toast.makeText(MainActivity.this,"ACTIVITY permission Required!", Toast.LENGTH_SHORT).show();
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, MY_PERMISSIONS_REQUEST_ACTIVITY_RECOGNITION);
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.ACTIVITY_RECOGNITION}, MY_PERMISSIONS_REQUEST_ACTIVITY_RECOGNITION);
                     } else{
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, MY_PERMISSIONS_REQUEST_ACTIVITY_RECOGNITION);
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.ACTIVITY_RECOGNITION}, MY_PERMISSIONS_REQUEST_ACTIVITY_RECOGNITION);
                     }
                 } else {
                     // Permission has already been granted
@@ -104,19 +117,21 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 // get permission for fine location
-                if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                if(ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
                     // Permission is not granted
-                    if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)){
+                    if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)){
                         // explain to the user
                         Toast.makeText(MainActivity.this,"LOCATION permission Required!", Toast.LENGTH_SHORT).show();
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
                     } else{
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
                     }
                 } else {
                     // Permission has already been granted
                     Toast.makeText(MainActivity.this,"You already have LOCATION permission!", Toast.LENGTH_SHORT).show();
                 }
+
+
             }
         });
 
