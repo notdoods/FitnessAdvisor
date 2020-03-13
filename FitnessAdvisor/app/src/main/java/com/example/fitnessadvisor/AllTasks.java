@@ -29,6 +29,7 @@ public class AllTasks extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_tasks);
 
+        // List to store all workouts in database
         workout_list = new ArrayList<>();
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("workout_info");
@@ -59,7 +60,6 @@ public class AllTasks extends AppCompatActivity {
                             b.setText(w.getName());
                             workout = w;
 
-                            // TODO: add click listener to navigate to Create Task activity
                             b.setOnClickListener(new TaskClickListener(workout, AllTasks.this));
                             linearLayout.addView(b);
                         }
@@ -70,16 +70,5 @@ public class AllTasks extends AppCompatActivity {
                     }
                 }
         );
-    }
-
-    public void navigate_to_task(Workout w) {
-        Intent intent = new Intent(AllTasks.this, CreateTask.class);
-        intent.putExtra("Weather", w.getWeather());
-        intent.putExtra("Gym", w.getGym());
-        intent.putExtra("Title", w.getName());
-        intent.putExtra("FocusArea", w.getFocusArea());
-        intent.putExtra("Difficulty", w.getDifficulty());
-        intent.putExtra("Instruction", w.getInstruction());
-        startActivity(intent);
     }
 }

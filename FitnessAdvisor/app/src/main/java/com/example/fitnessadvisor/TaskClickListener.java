@@ -15,6 +15,7 @@ public class TaskClickListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        // Navigate to task page, send workout information
         Intent intent = new Intent(context, CreateTask.class);
         intent.putExtra("Weather", workout.getWeather());
         intent.putExtra("Gym", workout.getGym());

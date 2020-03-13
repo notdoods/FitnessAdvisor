@@ -19,7 +19,6 @@ public class CreateTask extends AppCompatActivity {
         TextView focus_area = findViewById(R.id.focus_area);
         TextView instructions = findViewById(R.id.instructions);
 
-        // TODO: Get Task info
         Intent intent = this.getIntent();
         String title = intent.getStringExtra("Title");
         String focus = "Focus Area: " + intent.getStringExtra("FocusArea");
