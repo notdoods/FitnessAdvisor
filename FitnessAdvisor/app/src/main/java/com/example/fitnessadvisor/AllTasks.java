@@ -34,8 +34,9 @@ public class AllTasks extends AppCompatActivity {
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        // Get all info from database, generate Workout Objects to hold data
                         for(DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                            //System.out.println("AllTasks " + postSnapshot.child("Weather").getValue());
                             String weather = (String) postSnapshot.child("Weather").getValue();
                             String name = (String) postSnapshot.child("Name").getValue();
                             String gym = (String) postSnapshot.child("Gym").getValue();
@@ -46,12 +47,11 @@ public class AllTasks extends AppCompatActivity {
 
                             Workout w = new Workout(weather, diff, gym, focusArea, instructions, name);
 
-                            //Log.d(TAG, "Retrieve workout " + w);
                             workout_list.add(w);
                         }
 
+                        // Generate a button for each item in the database
                         for(Workout w: workout_list){
-                            //Button b = new Button();
                             LinearLayout linearLayout = findViewById(R.id.task_buttons);
                             Button b = new Button(AllTasks.this);
                             b.setText(w.getName());

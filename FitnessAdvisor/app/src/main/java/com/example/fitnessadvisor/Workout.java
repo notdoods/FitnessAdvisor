@@ -2,6 +2,9 @@ package com.example.fitnessadvisor;
 
 import androidx.annotation.NonNull;
 
+/** Workout class to hold info from database
+ *
+ */
 public class Workout {
     private String name, focusArea, instruction, weather, gym;
     private int difficulty;
