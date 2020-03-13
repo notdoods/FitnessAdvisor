@@ -1,44 +1,3 @@
-/*package com.example.fitnessadvisor;
-
-import android.os.Bundle;
-import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.DayOfWeek;
-import com.google.android.libraries.places.api.model.LocalTime;
-import com.google.android.libraries.places.api.model.TimeOfWeek;
-import com.google.android.libraries.places.api.net.PlacesClient;
-
-import static android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest.newInstance;
-
-public class findPlaces extends AppCompatActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_find_places);
-
-        Toast.makeText(this,"Use google Places api here!", Toast.LENGTH_SHORT).show();
-
-        String apiKey = getString(R.string.places_api_key);
-
-        Places.initialize(getApplicationContext(), "AIzaSyDwAlXJ6Vlxo6bVzvQGSttNWbCSwix7HhA");
-        PlacesClient placesClient = Places.createClient(this);
-
-        LocalTime localTime = LocalTime.newInstance(10,12);
-        DayOfWeek dayOfWeek = DayOfWeek.FRIDAY;
-        TimeOfWeek t = TimeOfWeek.newInstance(dayOfWeek,localTime);
-        String s = t.getDay().toString();
-        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
-        // turn this into a box
-
-        //test an API call
-
-    }
-}*/
-
-
 package com.example.fitnessadvisor;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -87,9 +46,6 @@ public class findPlaces extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_places);
 
-        // Retrieve a PlacesClient (previously initialized - see MainActivity)
-        //placesClient = Places.createClient(this);
-
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), "AIzaSyDwAlXJ6Vlxo6bVzvQGSttNWbCSwix7HhA");
             Toast.makeText(this, "Places initialized!", Toast.LENGTH_SHORT).show();
@@ -103,7 +59,10 @@ public class findPlaces extends AppCompatActivity {
                         Field.OPENING_HOURS,
                         Field.PHONE_NUMBER,
                         Field.UTC_OFFSET,
-                        Field.WEBSITE_URI);
+                        Field.WEBSITE_URI,
+                        Field.PRICE_LEVEL,
+                        Field.RATING,
+                        Field.USER_RATINGS_TOTAL);
         fieldSelector =
                 new FieldSelector(
                         findViewById(R.id.use_custom_fields),
@@ -112,7 +71,7 @@ public class findPlaces extends AppCompatActivity {
                         savedInstanceState);
         responseView = findViewById(R.id.response);
         setLoading(false);
-        Toast.makeText(this,"before findCurrentPlace()",Toast.LENGTH_SHORT).show();
+
         // Set listeners for programmatic Find Current Place
         findViewById(R.id.find_current_place_button).setOnClickListener((view) -> findCurrentPlace());
     }
@@ -171,14 +130,14 @@ public class findPlaces extends AppCompatActivity {
         });
 
         currentPlaceTask.addOnSuccessListener(
-                (response) ->
-                        responseView.setText(StringUtil.stringify(response, isDisplayRawResultsChecked())));
+                (response) -> responseView.setText(StringUtil.stringify(response, isDisplayRawResultsChecked()))
+        );
 
         currentPlaceTask.addOnFailureListener(
                 (exception) -> {
                     exception.printStackTrace();
                     responseView.setText(exception.getMessage());
-                });
+        });
 
         currentPlaceTask.addOnCompleteListener(task -> setLoading(false));
     }
