@@ -25,6 +25,14 @@ public class Workout {
         this.weather = weather;
     }
 
+    public Workout(Workout w) {
+        this.name = w.name;
+        this.focusArea = w.focusArea;
+        this.difficulty = w.difficulty;
+        this.instruction = w.instruction;
+        this.weather = w.weather;
+    }
+
     @NonNull
     @Override
     public String toString() {

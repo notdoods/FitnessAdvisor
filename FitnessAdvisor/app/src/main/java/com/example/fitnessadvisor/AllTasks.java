@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -20,6 +21,7 @@ import java.util.Map;
 
 public class AllTasks extends AppCompatActivity {
     private ArrayList<Workout> workout_list;
+    private Workout workout;
     private static final String TAG = "AllTasks";
 
     @Override
@@ -55,9 +57,10 @@ public class AllTasks extends AppCompatActivity {
                             LinearLayout linearLayout = findViewById(R.id.task_buttons);
                             Button b = new Button(AllTasks.this);
                             b.setText(w.getName());
+                            workout = w;
 
                             // TODO: add click listener to navigate to Create Task activity
-
+                            b.setOnClickListener(new TaskClickListener(workout, AllTasks.this));
                             linearLayout.addView(b);
                         }
                     }
@@ -67,5 +70,16 @@ public class AllTasks extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    public void navigate_to_task(Workout w) {
+        Intent intent = new Intent(AllTasks.this, CreateTask.class);
+        intent.putExtra("Weather", w.getWeather());
+        intent.putExtra("Gym", w.getGym());
+        intent.putExtra("Title", w.getName());
+        intent.putExtra("FocusArea", w.getFocusArea());
+        intent.putExtra("Difficulty", w.getDifficulty());
+        intent.putExtra("Instruction", w.getInstruction());
+        startActivity(intent);
     }
 }
