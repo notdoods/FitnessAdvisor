@@ -2,6 +2,7 @@ package com.example.fitnessadvisor;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -73,9 +74,16 @@ public class UserHomePage extends AppCompatActivity {
         Button fab = findViewById(R.id.add_new_task);
         fab.setOnClickListener( new View.OnClickListener() {
             public void onClick(View v) {
-                Log.d(TAG, "Explore button clicked");
+                Log.d(TAG, "Add new task button clicked");
                 // TODO: navigate to create a new todo item (not yet implemented)
+
+                navigate(AllTasks.class);
             }
         });
+    }
+
+    void navigate(Object o) {
+        Intent intent = new Intent(UserHomePage.this, (Class<?>) o);
+        startActivity(intent);
     }
 }
