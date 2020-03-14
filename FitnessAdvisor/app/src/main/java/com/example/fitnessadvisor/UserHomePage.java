@@ -85,6 +85,15 @@ public class UserHomePage extends AppCompatActivity {
                 navigate(AllTasks.class);
             }
         });
+
+        // Click listener for "Search exercises"
+        Button search = findViewById(R.id.search_button);
+        search.setOnClickListener( new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.d(TAG, "Search button clicked");
+                navigate(searchExercise.class);
+            }
+        });
     }
 
     // Navigate to a new activity

@@ -14,6 +14,7 @@
         <activity android:name=".UserHomePage" />
         <activity android:name=".LogIn" />
         <activity android:name=".UserRegisterDataActivity" />
+        <activity android:name=".searchExercise" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
