@@ -33,22 +33,25 @@ public class UserHomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home_page);
 
+        // Get Firebase currently logged in user
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser curr_user = mAuth.getCurrentUser();
 
+        // Grab fields from view
         user_name = findViewById(R.id.user_full_name);
         TextView date = findViewById(R.id.date);
 
+        // Date formatting
         Date today = Calendar.getInstance().getTime();//getting date
         SimpleDateFormat formatter = new SimpleDateFormat("EEEE, MMMM d", Locale.US);
         String date_str = formatter.format(today);
-
         date.setText(date_str);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("users/"+ curr_user.getUid());
         User u_info = new User("err", "err", 0);
 
+        // Get the user from the database using user ID
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -63,6 +66,7 @@ public class UserHomePage extends AppCompatActivity {
             }
         });
 
+        // Click listener for "Explore"
         Button explore_button = findViewById(R.id.explore);
         explore_button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -71,11 +75,14 @@ public class UserHomePage extends AppCompatActivity {
             }
         });
 
+        // Click listener for "add new task"
         Button fab = findViewById(R.id.add_new_task);
         fab.setOnClickListener( new View.OnClickListener() {
             public void onClick(View v) {
-                Log.d(TAG, "Explore button clicked");
+                Log.d(TAG, "Add new task button clicked");
                 // TODO: navigate to create a new todo item (not yet implemented)
+
+                navigate(AllTasks.class);
             }
         });
 
@@ -88,5 +95,11 @@ public class UserHomePage extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    // Navigate to a new activity
+    void navigate(Object o) {
+        Intent intent = new Intent(UserHomePage.this, (Class<?>) o);
+        startActivity(intent);
     }
 }

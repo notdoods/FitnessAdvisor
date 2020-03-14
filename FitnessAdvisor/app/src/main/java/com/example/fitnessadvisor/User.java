@@ -1,19 +1,13 @@
 package com.example.fitnessadvisor;
 
-import androidx.annotation.NonNull;
-
-import java.util.prefs.Preferences;
-
 public class User {
     private String name, id;
     private int age;
-    //private UserPreferences p;
 
     public User(String name, String id, int age){
         this.name = name;
         this.id = id;
         this.age = age;
-        //this.p = p;
     }
 
     public User(){
@@ -36,10 +30,6 @@ public class User {
         this.name = name;
     }
 
-    /*public void setP(UserPreferences p) {
-        this.p = p;
-    }*/
-
     // Accessors
     public int getAge() {
         return age;
@@ -53,7 +43,4 @@ public class User {
         return name;
     }
 
-    /*public UserPreferences getP() {
-        return p;
-    }*/
 }
