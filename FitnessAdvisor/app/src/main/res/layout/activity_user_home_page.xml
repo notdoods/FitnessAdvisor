@@ -67,7 +67,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10sp"
-            android:text="Add new Task" />
+            android:text="Add new Task"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:id="@+id/search_button"
+            android:text="Search Exercises" />
     </LinearLayout>
 
     <Button
