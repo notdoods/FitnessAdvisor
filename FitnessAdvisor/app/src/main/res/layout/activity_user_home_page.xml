@@ -83,4 +83,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
+    <Button
+        android:id="@+id/places"
+        android:layout_width="99dp"
+        android:layout_height="42dp"
+        android:text="Places"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.581"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        tools:layout_editor_absoluteY="138dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

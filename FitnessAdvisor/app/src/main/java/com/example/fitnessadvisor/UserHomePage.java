@@ -2,6 +2,7 @@ package com.example.fitnessadvisor;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -75,6 +76,16 @@ public class UserHomePage extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "Explore button clicked");
                 // TODO: navigate to create a new todo item (not yet implemented)
+            }
+        });
+
+        Button buttonPlaces = findViewById(R.id.places);
+        buttonPlaces.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                intent = new Intent(getApplicationContext(), findPlaces.class);
+                startActivity(intent);
             }
         });
     }
