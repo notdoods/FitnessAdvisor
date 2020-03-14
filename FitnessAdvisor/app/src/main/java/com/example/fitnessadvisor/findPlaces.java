@@ -94,10 +94,6 @@ public class findPlaces extends AppCompatActivity {
             Toast.makeText(this,"after if",Toast.LENGTH_SHORT).show();
         }
 
-        // Note that it is not possible to request a normal (non-dangerous) permission from
-        // ActivityCompat.requestPermissions(), which is why the checkPermission() only checks if
-        // ACCESS_FINE_LOCATION is granted. It is still possible to check whether a normal permission
-        // is granted or not using ContextCompat.checkSelfPermission().
         if (checkPermission(ACCESS_FINE_LOCATION)) {
             findCurrentPlaceWithPermissions();
             Toast.makeText(this, "findCurrentPlaceWithPermissions()",Toast.LENGTH_SHORT).show();

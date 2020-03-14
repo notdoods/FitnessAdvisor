@@ -11,6 +11,7 @@ import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 
 import android.graphics.Bitmap;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -18,6 +19,9 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.google.android.libraries.places.api.model.Place.*;
+import com.google.android.libraries.places.api.model.Place.Field;
 
 /**
  * Utility class for converting objects to viewable strings and back.
@@ -114,6 +118,20 @@ public final class StringUtil {
             appendListToStringBuilder(builder, response.getPlaceLikelihoods());
         } else {
             for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
+                Log.d("myHi","Hi");
+                Place p = placeLikelihood.getPlace();
+                List<Type> t = p.getTypes();
+
+                Log.d("sizetypes",Integer.toString(t.size()));
+
+                for(int i = 0; i < t.size(); i++) {
+                    String s = t.get(i).toString();
+                    if(s == null) {
+                        Log.d("isnull","string is null");
+                    }
+                    Log.d("mytype", "hi");
+                }
+
                 builder
                         .append(RESULT_SEPARATOR)
                         .append("Likelihood: ")

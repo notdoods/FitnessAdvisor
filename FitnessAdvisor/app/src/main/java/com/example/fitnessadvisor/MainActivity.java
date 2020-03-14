@@ -125,6 +125,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button buttonPlaces = findViewById(R.id.places);
+        buttonPlaces.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                intent = new Intent(getApplicationContext(), findPlaces.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
