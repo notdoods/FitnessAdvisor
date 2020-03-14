@@ -24,7 +24,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/MY_API_KEY">
         </meta-data>
-        
+
         <activity android:name=".AllTasks"/>
         <activity android:name=".CreateTask" />
         <activity android:name=".findPlaces" />

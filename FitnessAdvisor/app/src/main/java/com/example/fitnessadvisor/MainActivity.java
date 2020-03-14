@@ -85,17 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 navigate(LogIn.class);
             }
         });
-/*
-        Button buttonPlaces = findViewById(R.id.places);
-        buttonPlaces.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent;
-                intent = new Intent(getApplicationContext(), findPlaces.class);
-                startActivity(intent);
-            }
-        });
-*/
+
         Button buttonRequest = findViewById(R.id.permissions);
         buttonRequest.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.Q)
