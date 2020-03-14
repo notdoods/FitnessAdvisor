@@ -74,6 +74,7 @@ public class findPlaces extends AppCompatActivity {
 
         // Set listeners for programmatic Find Current Place
         findViewById(R.id.find_current_place_button).setOnClickListener((view) -> findCurrentPlace());
+        findViewById(R.id.find_nearby_food_button).setOnClickListener((view) -> findCurrentPlaceF());
     }
 
     @Override
@@ -97,6 +98,23 @@ public class findPlaces extends AppCompatActivity {
         if (checkPermission(ACCESS_FINE_LOCATION)) {
             findCurrentPlaceWithPermissions();
             Toast.makeText(this, "findCurrentPlaceWithPermissions()",Toast.LENGTH_SHORT).show();
+            Log.d("fine_loc granted", "access_fine_loc granted!");
+        }else{
+            Toast.makeText(this,"ACCESS_FINE_LOCATION needed",Toast.LENGTH_SHORT).show();
+            Log.d("fine_loc denied","access_fine_loc needed!");
+        }
+    }
+
+    private void findCurrentPlaceF() {
+
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_WIFI_STATE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this,"after if",Toast.LENGTH_SHORT).show();
+        }
+
+        if (checkPermission(ACCESS_FINE_LOCATION)) {
+            findCurrentPlaceWithPermissionsF();
+            Toast.makeText(this, "findCurrentPlaceWithPermissionsF()",Toast.LENGTH_SHORT).show();
             Log.d("fine_loc granted", "access_fine_loc granted!");
         }else{
             Toast.makeText(this,"ACCESS_FINE_LOCATION needed",Toast.LENGTH_SHORT).show();
@@ -138,6 +156,34 @@ public class findPlaces extends AppCompatActivity {
         currentPlaceTask.addOnCompleteListener(task -> setLoading(false));
     }
 
+    @RequiresPermission(allOf = {ACCESS_FINE_LOCATION, ACCESS_WIFI_STATE})
+    private void findCurrentPlaceWithPermissionsF() {
+        setLoading(true);
+
+        FindCurrentPlaceRequest currentPlaceRequest =
+                FindCurrentPlaceRequest.newInstance(getPlaceFields());
+        Task<FindCurrentPlaceResponse> currentPlaceTask =
+                placesClient.findCurrentPlace(currentPlaceRequest);
+
+        currentPlaceTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("fail", "currentPlaceTask failed");
+            }
+        });
+
+        currentPlaceTask.addOnSuccessListener(
+                (response) -> responseView.setText(StringUtil.stringifyF(response, isDisplayRawResultsChecked()))
+        );
+
+        currentPlaceTask.addOnFailureListener(
+                (exception) -> {
+                    exception.printStackTrace();
+                    responseView.setText(exception.getMessage());
+                });
+
+        currentPlaceTask.addOnCompleteListener(task -> setLoading(false));
+    }
     //////////////////////////
     // Helper methods below //
     //////////////////////////
