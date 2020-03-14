@@ -31,6 +31,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.ACCESS_WIFI_STATE;
 import static android.Manifest.permission.ACTIVITY_RECOGNITION;
 import static android.Manifest.permission.INTERNET;
+import android.os.Handler;
 
 /**
  * Activity for testing {@link PlacesClient#findCurrentPlace(FindCurrentPlaceRequest)}.
