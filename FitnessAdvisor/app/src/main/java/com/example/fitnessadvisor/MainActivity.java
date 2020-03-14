@@ -1,9 +1,20 @@
 package com.example.fitnessadvisor;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.activity.ComponentActivity;
+
+import android.content.pm.PackageManager;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.ACCESS_WIFI_STATE;
+import static android.Manifest.permission.ACTIVITY_RECOGNITION;
+import static android.Manifest.permission.INTERNET;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private String password;
     private static final String TAG = "MainActivity";
 
+    private static final int MY_PERMISSIONS_REQUEST_ACTIVITY_RECOGNITION = 0;
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
                 mAuth = FirebaseAuth.getInstance();
 
                 // Get text from text fields
-                EditText etext = (EditText) findViewById(R.id.email);
-                EditText ptext = (EditText) findViewById(R.id.password);
+                EditText etext = findViewById(R.id.email);
+                EditText ptext = findViewById(R.id.password);
 
                 email = etext.getText().toString();
                 password = ptext.getText().toString();
@@ -71,6 +85,56 @@ public class MainActivity extends AppCompatActivity {
                 navigate(LogIn.class);
             }
         });
+
+        Button buttonRequest = findViewById(R.id.permissions);
+        buttonRequest.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
+            @Override
+            public void onClick(View v) {
+
+                if(ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED){
+                    // Permission is not granted
+                    if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, android.Manifest.permission.ACTIVITY_RECOGNITION)){
+                        // explain to the user
+                        Toast.makeText(MainActivity.this,"ACTIVITY permission Required!", Toast.LENGTH_SHORT).show();
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.ACTIVITY_RECOGNITION}, MY_PERMISSIONS_REQUEST_ACTIVITY_RECOGNITION);
+                    } else{
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.ACTIVITY_RECOGNITION}, MY_PERMISSIONS_REQUEST_ACTIVITY_RECOGNITION);
+                    }
+                } else {
+                    // Permission has already been granted
+                    Toast.makeText(MainActivity.this,"You already have ACTIVITY permission!", Toast.LENGTH_SHORT).show();
+                }
+
+                // get permission for fine location
+                if(ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                    // Permission is not granted
+                    if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)){
+                        // explain to the user
+                        Toast.makeText(MainActivity.this,"LOCATION permission Required!", Toast.LENGTH_SHORT).show();
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                    } else{
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                    }
+                } else {
+                    // Permission has already been granted
+                    Toast.makeText(MainActivity.this,"You already have LOCATION permission!", Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+        });
+
+        Button buttonPlaces = findViewById(R.id.places);
+        buttonPlaces.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                intent = new Intent(getApplicationContext(), findPlaces.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
