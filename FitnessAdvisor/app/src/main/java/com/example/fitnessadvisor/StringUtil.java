@@ -16,12 +16,12 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.google.android.libraries.places.api.model.Place.*;
-import com.google.android.libraries.places.api.model.Place.Field;
+import com.google.android.libraries.places.api.model.Place.*;
 
 /**
  * Utility class for converting objects to viewable strings and back.
@@ -118,27 +118,67 @@ public final class StringUtil {
             appendListToStringBuilder(builder, response.getPlaceLikelihoods());
         } else {
             for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
-                Log.d("myHi","Hi");
-                Place p = placeLikelihood.getPlace();
-                List<Type> t = p.getTypes();
 
-                Log.d("sizetypes",Integer.toString(t.size()));
+                List<Place.Type> t = placeLikelihood.getPlace().getTypes();
+                for(int i = 0; i < t.size(); i++){
+                    if(t.get(i) == Type.BICYCLE_STORE || t.get(i) == Type.PARK || t.get(i) == Type.AMUSEMENT_PARK ||
+                        t.get(i) == Type.SHOPPING_MALL || t.get(i) == Type.AQUARIUM || t.get(i) == Type.ART_GALLERY ||
+                        t.get(i) == Type.BOWLING_ALLEY ||t.get(i) == Type.TOURIST_ATTRACTION || t.get(i) == Type.SPA ||
+                        t.get(i) == Type.NIGHT_CLUB || t.get(i) == Type.LIBRARY || t.get(i) == Type.CAMPGROUND || t.get(i) == Type.CASINO ||
+                        t.get(i) == Type.CEMETERY || t.get(i) == Type.COLLOQUIAL_AREA || t.get(i) == Type.NEIGHBORHOOD || t.get(i) == Type.NATURAL_FEATURE ||
+                        t.get(i) == Type.GYM || t.get(i) == Type.HINDU_TEMPLE || t.get(i) == Type.MUSEUM || t.get(i) == Type.STADIUM ||
+                        t.get(i) == Type.TOWN_SQUARE || t.get(i) == Type.UNIVERSITY || t.get(i) == Type.ZOO || t.get(i) == Type.DEPARTMENT_STORE ||
+                        t.get(i) == Type.ELECTRONICS_STORE || t.get(i) == Type.MOVIE_THEATER || t.get(i) == Type.ARCHIPELAGO || t.get(i) == Type.PET_STORE){
 
-                for(int i = 0; i < t.size(); i++) {
-                    String s = t.get(i).toString();
-                    if(s == null) {
-                        Log.d("isnull","string is null");
+                        builder
+                            .append(RESULT_SEPARATOR)
+                            .append("Likelihood: ")
+                            .append(placeLikelihood.getLikelihood())
+                            .append(FIELD_SEPARATOR)
+                            .append("Type: ")
+                            .append(placeLikelihood.getPlace().getTypes())
+                            .append(FIELD_SEPARATOR)
+                            .append("Place: ")
+                            .append(stringify(placeLikelihood.getPlace()));
+                        break;
                     }
-                    Log.d("mytype", "hi");
                 }
+            }
+        }
 
-                builder
-                        .append(RESULT_SEPARATOR)
-                        .append("Likelihood: ")
-                        .append(placeLikelihood.getLikelihood())
-                        .append(FIELD_SEPARATOR)
-                        .append("Place: ")
-                        .append(stringify(placeLikelihood.getPlace()));
+        return builder.toString();
+    }
+
+    static String stringifyF(FindCurrentPlaceResponse response, boolean raw) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(response.getPlaceLikelihoods().size()).append(" Current Place Results:");
+
+        if (raw) {
+            builder.append(RESULT_SEPARATOR);
+            appendListToStringBuilder(builder, response.getPlaceLikelihoods());
+        } else {
+            for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
+
+                List<Place.Type> t = placeLikelihood.getPlace().getTypes();
+                for(int i = 0; i < t.size(); i++){
+                    if(t.get(i) == Type.FOOD || t.get(i) == Type.RESTAURANT || t.get(i) == Type.CAFE || t.get(i) == Type.GROCERY_OR_SUPERMARKET ||
+                            t.get(i) == Type.SUPERMARKET || t.get(i) == Type.BAKERY || t.get(i) == Type.BAR || t.get(i) == Type.GAS_STATION ||
+                            t.get(i) == Type.LIQUOR_STORE || t.get(i) == Type.MEAL_DELIVERY || t.get(i) == Type.MEAL_TAKEAWAY){
+
+                        builder
+                                .append(RESULT_SEPARATOR)
+                                .append("Likelihood: ")
+                                .append(placeLikelihood.getLikelihood())
+                                .append(FIELD_SEPARATOR)
+                                .append("Type: ")
+                                .append(placeLikelihood.getPlace().getTypes())
+                                .append(FIELD_SEPARATOR)
+                                .append("Place: ")
+                                .append(stringify(placeLikelihood.getPlace()));
+                        break;
+                    }
+                }
             }
         }
 

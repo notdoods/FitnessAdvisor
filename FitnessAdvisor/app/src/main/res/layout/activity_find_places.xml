@@ -38,6 +38,12 @@
             android:layout_height="wrap_content"
             android:text="@string/find_current_place_button"/>
 
+        <Button
+            android:id="@+id/find_nearby_food_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/find_nearby_food_button" />
+
         <CheckBox
             android:id="@+id/display_raw_results"
             android:layout_width="wrap_content"

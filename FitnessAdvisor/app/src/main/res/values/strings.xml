@@ -3,7 +3,7 @@
     <string name="MY_API_KEY">AIzaSyDwAlXJ6Vlxo6bVzvQGSttNWbCSwix7HhA</string>
 
     <!-- Strings for places api -->
-    <string name="button_current_place">Current Place</string>
+    <string name="button_current_place">Current Places</string>
     <string name="button_autocomplete">Autocomplete</string>
     <string name="google_play_services_error">Google Play Services is not available</string>
     <string name="location_permission_error">Location permission required</string>
@@ -13,7 +13,8 @@
     <!-- FIND CURRENT PLACE -->
 
     <!-- Text for the find current place submit button. -->
-    <string name="find_current_place_button" translatable="false">Find Current Place</string>
+    <string name="find_current_place_button" translatable="false">Nearby Activities</string>
+    <string name="find_nearby_food_button">Nearby Food</string>
     <string name="use_custom_fields" translatable="false">Manually set Place Fields?</string>
     <!-- Text for raw results checkbox. When checked raw return values will be displayed. -->
     <string name="display_raw_results" translatable="false">Display raw results?</string>
