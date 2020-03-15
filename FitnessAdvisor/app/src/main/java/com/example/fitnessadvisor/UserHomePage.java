@@ -82,6 +82,7 @@ public class UserHomePage extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "Explore button clicked");
                 // TODO: navigate to recommended activity (not yet implemented)
+                navigate(Explore.class);
             }
         });
 
