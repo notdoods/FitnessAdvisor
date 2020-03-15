@@ -86,4 +86,5 @@ public class Workout {
     public void setWeather(String weather) {
         this.weather = weather;
     }
+
 }

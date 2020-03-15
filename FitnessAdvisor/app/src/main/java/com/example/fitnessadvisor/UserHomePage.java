@@ -1,12 +1,15 @@
 package com.example.fitnessadvisor;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -19,19 +22,26 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class UserHomePage extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static final String TAG = "UserHomePage";
     private TextView user_name;
+    private Map<String, Workout> task_list;
+    LinearLayout tasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home_page);
+
+        task_list = new HashMap<String, Workout>();
 
         // Get Firebase currently logged in user
         mAuth = FirebaseAuth.getInstance();
@@ -75,17 +85,6 @@ public class UserHomePage extends AppCompatActivity {
             }
         });
 
-        // Click listener for "add new task"
-        Button fab = findViewById(R.id.add_new_task);
-        fab.setOnClickListener( new View.OnClickListener() {
-            public void onClick(View v) {
-                Log.d(TAG, "Add new task button clicked");
-                // TODO: navigate to create a new todo item (not yet implemented)
-
-                navigate(AllTasks.class);
-            }
-        });
-
         // Click listener for "Search exercises"
         Button search = findViewById(R.id.search_button);
         search.setOnClickListener( new View.OnClickListener() {
@@ -103,6 +102,39 @@ public class UserHomePage extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // Display task list
+        tasks = findViewById(R.id.task_layout);
+        ref.child("tasks").addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        task_list = new HashMap<>();
+                        tasks.removeAllViews();
+                        // Get all info from database, generate Workout Objects to hold data
+                        for(DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                            Workout w = postSnapshot.getValue(Workout.class);
+                            task_list.put(postSnapshot.getKey(), w);
+                            Log.d(TAG, postSnapshot.getValue(Workout.class).toString());
+                        }
+
+                        for(Map.Entry<String, Workout> mapElement : task_list.entrySet()){
+                            Button b = new Button(UserHomePage.this);
+                            b.setText(mapElement.getValue().getName());
+                            b.setBackgroundColor(Color.WHITE);
+
+                            b.setOnClickListener(new TaskClickListener(mapElement.getValue(), UserHomePage.this, true, mapElement.getKey()));
+                            tasks.addView(b);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                }
+        );
     }
 
     // Navigate to a new activity

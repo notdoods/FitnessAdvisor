@@ -6,6 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".UserHomePage">
 
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="401dp"
+        android:layout_height="265dp"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.68">
+
+        <LinearLayout
+            android:id="@+id/task_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="120dp"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </ScrollView>
+
     <ImageView
         android:id="@+id/user_avatar"
         android:layout_width="wrap_content"
@@ -52,43 +73,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="288dp"
-        android:layout_height="340dp"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6">
-
-        <Button
-            android:id="@+id/add_new_task"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10sp"
-            android:text="Add new Task" />
-
-        <Button
-            android:id="@+id/search_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10sp"
-            android:text="Search Exercises" />
-    </LinearLayout>
-
     <Button
         android:id="@+id/explore"
         style="@style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
         android:layout_width="287dp"
         android:layout_height="48dp"
+        android:layout_marginBottom="28dp"
         android:background="@android:color/holo_blue_dark"
         android:text="Explore"
         android:textColor="@color/design_default_color_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+        app:layout_constraintVertical_bias="0.757" />
 
     <Button
         android:id="@+id/places"
@@ -102,5 +100,17 @@
         app:layout_constraintHorizontal_bias="0.892"
         app:layout_constraintStart_toEndOf="@+id/textView6"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/search_button"
+        android:layout_width="275dp"
+        android:layout_height="60dp"
+        android:layout_margin="10sp"
+        android:layout_marginTop="16dp"
+        android:text="Search Exercises"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
