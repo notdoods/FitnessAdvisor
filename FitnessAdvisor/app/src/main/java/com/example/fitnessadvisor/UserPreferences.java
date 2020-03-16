@@ -4,6 +4,12 @@ public class UserPreferences {
     private boolean walking, running, gym;
     //private UserGoal[] goals;
 
+    public UserPreferences() {
+        this.walking = false;
+        this.running = false;
+        this.gym = false;
+    }
+
     public UserPreferences(boolean walking, boolean running, boolean gym) {
         this.walking = walking;
         this.running = running;
