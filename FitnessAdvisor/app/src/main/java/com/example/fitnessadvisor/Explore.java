@@ -21,14 +21,16 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
 
 
 public class Explore extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static final String TAG = "Explore";
-    private ArrayList<Workout> workout_list;
+    private ArrayList<Workout> potential_workout_list;
     private Workout workout;
-
+    private Map<String,Integer> track_map;
+    private boolean gym_goer, running, walking;
 
 
     @Override
@@ -36,12 +38,42 @@ public class Explore extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
 
-        workout_list = new ArrayList<>();
+        potential_workout_list = new ArrayList<>();
+        gym_goer = false;
+        running = false;
+        walking = false;
 
         // Get current logged in user from Firebase
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser curr_user = mAuth.getCurrentUser();
+        String id = curr_user.getUid();
 
+        // store preferences
+        DatabaseReference pref = FirebaseDatabase.getInstance().getReference("users/"+id+"/preferences/");
+        pref.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Log.d(TAG, "Attempting to store preferences");
+                        UserPreferences user_pref = dataSnapshot.getValue(UserPreferences.class);
+                        if (user_pref.isGym()) {
+                            gym_goer = true;
+                        }
+                        if (user_pref.isRunning()) {
+                            running = true;
+                        }
+                        if (user_pref.isWalking())
+                        {
+                            walking = true;
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                }
+        );
 
         // Access Workout Info table of database
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("workout_info");
@@ -60,27 +92,51 @@ public class Explore extends AppCompatActivity {
                             long difficulty = (long) postSnapshot.child("Difficulty").getValue();
                             int diff = (int) difficulty;
 
-                            Workout w = new Workout(weather, diff, gym, focusArea, instructions, name);
-
-                            workout_list.add(w);
+                            // User goes to gym and workout is gym workout
+                            if ( gym_goer == true && (gym.equalsIgnoreCase("yes")) )  {
+                                // If user does not walk/run but workout focuses on cardio/sport,
+                                // skip it
+                                if ( (walking == false && running == false) && (focusArea.equalsIgnoreCase("cardio") ||
+                                        focusArea.equalsIgnoreCase("sport"))) {
+                                        continue;
+                                } else {
+                                    Workout w = new Workout(weather, diff, gym, focusArea, instructions, name);
+                                    potential_workout_list.add(w);
+                                }
+                            }
+                            // User does not go to gym and workout is not gym workout
+                            else if (gym_goer == false && gym.equalsIgnoreCase("no")) {
+                                Workout w = new Workout(weather, diff, gym, focusArea, instructions, name);
+                                potential_workout_list.add(w);
+                            }
+                            // User prefers to walk or run and workout is Cardio/Sport
+                            else if ( (walking == true || running == true) && (focusArea.equalsIgnoreCase("cardio") ||
+                                    focusArea.equalsIgnoreCase("sport")) ) {
+                                Workout w = new Workout(weather, diff, gym, focusArea, instructions, name);
+                                potential_workout_list.add(w);
+                            } else {
+                                continue;
+                            }
                         }
 
                         // To Do: Add recommendation algorithm here
                         // For now simply returns first 5 items in the
                         // workout list sorted in random order
+                        //track_map = History.getTracker();
 
-                        Collections.shuffle(workout_list);
-                        int len = workout_list.size();
+
+
+                        Collections.shuffle(potential_workout_list);
+                        int len = potential_workout_list.size();
                         for(int i=0; i<4; i++){
                             LinearLayout linearLayout = findViewById(R.id.recTasks);
                             Button b = new Button(Explore.this);
-                            b.setText(workout_list.get(i).getName());
-                            workout = workout_list.get(i);
+                            b.setText(potential_workout_list.get(i).getName());
+                            workout = potential_workout_list.get(i);
 
                             b.setOnClickListener(new TaskClickListener(workout, Explore.this));
                             linearLayout.addView(b);
                         }
-
                     }
 
                     @Override
@@ -88,6 +144,7 @@ public class Explore extends AppCompatActivity {
 
                     }
                 }
+
         );
 
         Button all_tasks = findViewById(R.id.addBtn);
@@ -108,6 +165,7 @@ public class Explore extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "View task history button clicked");
                 // TO DO: Implement Task History activity
+                navigate(History.class);
             }
         });
 
@@ -139,12 +197,12 @@ public class Explore extends AppCompatActivity {
                 linearLayout.removeAllViews();
 
                 // Displays new random tasks on recTasks
-                Collections.shuffle(workout_list);
-                int len = workout_list.size();
+                Collections.shuffle(potential_workout_list);
+                int len = potential_workout_list.size();
                 for(int i=0; i<4; i++) {
                     Button b = new Button(Explore.this);
-                    b.setText(workout_list.get(i).getName());
-                    workout = workout_list.get(i);
+                    b.setText(potential_workout_list.get(i).getName());
+                    workout = potential_workout_list.get(i);
 
                     b.setOnClickListener(new TaskClickListener(workout, Explore.this));
                     linearLayout.addView(b);

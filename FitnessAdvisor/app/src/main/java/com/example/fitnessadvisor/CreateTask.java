@@ -64,8 +64,14 @@ public class CreateTask extends AppCompatActivity {
                     String id = user.getUid();
                     String task_id = intent.getStringExtra("ID");
                     DatabaseReference ref = db.getReference("users/" + id + "/tasks/" + task_id);
+
+                    // Add task to history
+                    DatabaseReference ref2 = db.getReference("users/" + id );
+                    ref2.child("history").push().setValue(w);
+
                     ref.removeValue();
                     finish();
+
                 }
             });
 
