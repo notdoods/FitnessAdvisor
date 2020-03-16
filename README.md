@@ -17,6 +17,11 @@
   Don't make changes directly to master!! (changes to the readme are ok)
   Pull requests require at least one other person to approve a merge, but you can force a merge with admin privileges if really necessary.
   
+  ## Basic Use
+  1. Clone the repo to your local machine
+  2. Open the project file (FitnessAdvisor) in Android Studio
+  3. Choose an emulator device (either virtual or through USB debugging) and then run the application
+  
   ## Android Studio tips
   - Before you run the project for the first time, make sure to clean and rebuild the project (Build > Clean Project; Build > Rebuild)
   - Some good resources for Android dev + Firebase:
