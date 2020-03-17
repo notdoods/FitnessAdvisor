@@ -1,5 +1,6 @@
 package com.example.fitnessadvisor;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -13,14 +14,20 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Map;
 
 // INCOMPLETE
 public class CreateTask extends AppCompatActivity {
     private String title, focus, instruct, diff_str, weather, gym;
     private FirebaseAuth mAuth;
     private Workout w;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +74,27 @@ public class CreateTask extends AppCompatActivity {
 
                     // Add task to history
                     DatabaseReference ref2 = db.getReference("users/" + id );
+
+                    //update completed
+                    ref2.child("completed").child(w.getFocusArea()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Integer completed_num = dataSnapshot.getValue(Integer.class);
+                            int update_num;
+                            if (completed_num == null) {
+                                update_num = 1;
+                            } else {
+                                update_num = completed_num+1;
+                            }
+                            ref2.child("completed").child(w.getFocusArea()).setValue(update_num);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                    // add workout to history
                     ref2.child("history").push().setValue(w);
 
                     ref.removeValue();

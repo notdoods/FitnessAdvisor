@@ -3,6 +3,7 @@ package com.example.fitnessadvisor;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -21,16 +22,17 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Map;
+import java.util.Comparator;
 
 
 public class Explore extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static final String TAG = "Explore";
     private ArrayList<Workout> potential_workout_list;
+    private ArrayList<Pair<String,Integer>> order_helper;
     private Workout workout;
-    private Map<String,Integer> track_map;
     private boolean gym_goer, running, walking;
+    private int total;
 
 
     @Override
@@ -39,6 +41,7 @@ public class Explore extends AppCompatActivity {
         setContentView(R.layout.activity_explore);
 
         potential_workout_list = new ArrayList<>();
+        order_helper = new ArrayList<>();
         gym_goer = false;
         running = false;
         walking = false;
@@ -92,6 +95,10 @@ public class Explore extends AppCompatActivity {
                             long difficulty = (long) postSnapshot.child("Difficulty").getValue();
                             int diff = (int) difficulty;
 
+                            /*
+                             * Filter Recommended Workouts by Preferences
+                             */
+
                             // User goes to gym and workout is gym workout
                             if ( gym_goer == true && (gym.equalsIgnoreCase("yes")) )  {
                                 // If user does not walk/run but workout focuses on cardio/sport,
@@ -118,25 +125,89 @@ public class Explore extends AppCompatActivity {
                                 continue;
                             }
                         }
+                        //createButtons(potential_workout_list,6);
+                        DatabaseReference completed_ref = FirebaseDatabase.getInstance().getReference("users/"+id+"/completed/");
+                        completed_ref.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    String focus = snapshot.getKey();
+                                    Integer num_comp = snapshot.getValue(Integer.class);
 
-                        // To Do: Add recommendation algorithm here
-                        // For now simply returns first 5 items in the
-                        // workout list sorted in random order
-                        //track_map = History.getTracker();
+                                    if (num_comp != null) {
+                                        Pair<String, Integer> p = new Pair<>(focus, num_comp);
+                                        order_helper.add(p);
+                                    }
+                                }
+                                // sort order_helper in descending order (greatest->least)
+                                Collections.sort(order_helper, new Comparator<Pair<String, Integer>>() {
+                                    @Override
+                                    public int compare(Pair<String, Integer> o1, Pair<String, Integer> o2) {
+                                        return o2.second - o1.second;
+                                    }
+                                });
 
+                                // no completed tasks, recommend 6 random tasks
+                                if (order_helper.size() <= 0 ) {
+                                    Log.d(TAG, "order_helper is size 0");
+                                    Collections.shuffle(potential_workout_list);
+                                    createButtons(potential_workout_list,6);
+                                }
+                                // one completed task type, recommend 4 tasks with
+                                // same type, 2 random tasks
+                                else if (order_helper.size() == 1) {
+                                    Log.d(TAG, "order_helper is size 1");
+                                    Collections.shuffle(potential_workout_list);
 
+                                    ArrayList<Workout> primary = new ArrayList<>();
+                                    for (Workout w : potential_workout_list) {
+                                        if (w.getFocusArea().equalsIgnoreCase(order_helper.get(0).first)) {
+                                            primary.add(w);
+                                        }
+                                    }
 
-                        Collections.shuffle(potential_workout_list);
-                        int len = potential_workout_list.size();
-                        for(int i=0; i<4; i++){
-                            LinearLayout linearLayout = findViewById(R.id.recTasks);
-                            Button b = new Button(Explore.this);
-                            b.setText(potential_workout_list.get(i).getName());
-                            workout = potential_workout_list.get(i);
+                                    if (primary.size() >= 4) {
+                                        createButtons(primary, 4);
+                                        createButtons(potential_workout_list, 2);
+                                    } else {
+                                        createButtons(primary, primary.size());
+                                        createButtons(potential_workout_list,6-primary.size());
+                                    }
+                                }
+                                // multiple task types recommend 3 tasks with same type as
+                                // most completed type, 2 tasks with second most completed, and
+                                // 1 random task
+                                else {
+                                    Collections.shuffle(potential_workout_list);
+                                    createButtons(potential_workout_list, 6);
 
-                            b.setOnClickListener(new TaskClickListener(workout, Explore.this));
-                            linearLayout.addView(b);
-                        }
+                                    //------------------------------ERROR SOMEWHERE HERE---------------------------//
+                                    /*
+                                    Log.d(TAG, "order_helper is size 1");
+                                    ArrayList<Workout> primary = new ArrayList<>();
+                                    ArrayList<Workout> second = new ArrayList<>();
+                                    for (Workout w : potential_workout_list) {
+                                        if (w.getFocusArea().equalsIgnoreCase(order_helper.get(0).first)) {
+                                            primary.add(w);
+                                        }
+                                        if (w.getFocusArea().equalsIgnoreCase(order_helper.get(1).first)) {
+                                            second.add(w);
+                                        }
+
+                                        createButtons(primary, 3);
+                                        createButtons(second, 2);
+                                        createButtons(potential_workout_list, 1);
+                                    }
+                                    */
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
 
                     @Override
@@ -146,6 +217,7 @@ public class Explore extends AppCompatActivity {
                 }
 
         );
+
 
         Button all_tasks = findViewById(R.id.addBtn);
         all_tasks.setOnClickListener(new View.OnClickListener() {
@@ -215,4 +287,21 @@ public class Explore extends AppCompatActivity {
         Intent intent = new Intent(Explore.this, (Class<?>) o);
         startActivity(intent);
     }
+
+    // Creates a button in recTasks linearLayout
+    void createButtons(ArrayList<Workout> workout_list, int num_buttons) {
+        if (workout_list.size() == 0) {
+            return;
+        }
+        for (int i=0; i<num_buttons; i++) {
+            LinearLayout linearLayout = findViewById(R.id.recTasks);
+            Button b = new Button(Explore.this);
+            b.setText(workout_list.get(i).getName());
+            workout = workout_list.get(i);
+
+            b.setOnClickListener(new TaskClickListener(workout, Explore.this));
+            linearLayout.addView(b);
+        }
+    }
+
 }

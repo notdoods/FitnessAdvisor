@@ -23,8 +23,6 @@ public class History extends AppCompatActivity {
     private ArrayList<Workout> history_list;
     private Workout workout;
 
-    static public Map<String, Integer> tracker_map;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,26 +40,15 @@ public class History extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                            String focus_area = workout.getFocusArea();
-
                             // add workout to history list
                             workout = postSnapshot.getValue(Workout.class);
                             history_list.add(workout);
 
-                            // Update count of completed task type. If a new type
-                            // of task is completed, sets value = 1. Else, updates
-                            // value of key by 1.
-                            Integer val = tracker_map.get(focus_area);
-                            if(val == null) {
-                                tracker_map.put(focus_area,1);
-                            } else {
-                                int old_value = tracker_map.get(focus_area);
-                                int new_value = old_value + 1;
-                                tracker_map.put(focus_area,new_value);
-                            }
                         }
 
                         // initialize/update personal_model
+                        DatabaseReference history_ref = FirebaseDatabase.getInstance().getReference("users/" + id);
+
 
                         LinearLayout linearLayout = findViewById(R.id.historyLayout);
                         for (Workout w : history_list) {
@@ -82,7 +69,4 @@ public class History extends AppCompatActivity {
         );
     }
 
-    static public Map<String, Integer> getTracker() {
-        return tracker_map;
-    }
 }
